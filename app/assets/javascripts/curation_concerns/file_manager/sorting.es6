@@ -24,7 +24,7 @@ export default class SortManager {
     this.element.removeClass("success")
     this.element.removeClass("failure")
     let persisting = $.post(
-      `/concern/${this.class_name}/${this.id}.json`,
+      this.save_action,
       params
     ).done(() => {
       this.element.data("current-order", this.order)
@@ -78,6 +78,10 @@ export default class SortManager {
 
   get singular_class_name() {
     return this.element.data("singular-class-name")
+  }
+  
+  get save_action() {
+    return this.element.data("save-action")
   }
 
   get order() {
