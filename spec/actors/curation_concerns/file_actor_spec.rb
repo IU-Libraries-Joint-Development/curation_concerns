@@ -17,7 +17,7 @@ describe CurationConcerns::Actors::FileActor do
       it 'calls ingest file job' do
         expect(IngestFileJob).to receive(:perform_later).with(file_set, uploaded_file.path, user, ingest_options)
         expect(CurationConcerns::WorkingDirectory).not_to receive(:copy_file_to_working_directory)
-        actor.ingest_file(uploaded_file)
+        actor.ingest_file(uploaded_file, true)
       end
     end
     context "when the file is not available locally" do
@@ -26,7 +26,13 @@ describe CurationConcerns::Actors::FileActor do
       end
       it 'calls ingest file job' do
         expect(IngestFileJob).to receive(:perform_later).with(file_set, /world\.png$/, user, ingest_options)
-        actor.ingest_file(uploaded_file)
+        actor.ingest_file(uploaded_file, true)
+      end
+    end
+    context "when performing the ingest synchronously" do
+      it 'calls ingest file job' do
+        expect(IngestFileJob).to receive(:perform_now).with(file_set, uploaded_file.path, user, ingest_options)
+        actor.ingest_file(uploaded_file, false)
       end
     end
   end
