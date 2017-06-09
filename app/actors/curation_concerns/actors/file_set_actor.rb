@@ -63,7 +63,7 @@ module CurationConcerns
       # @param [File, ActionDigest::HTTP::UploadedFile, Tempfile] file the file uploaded by the user.
       # @param [String] relation ('original_file')
       def update_content(file, relation = 'original_file')
-        file_actor_class.new(file_set, relation, user).ingest_file(file)
+        file_actor_class.new(file_set, relation, user).ingest_file(file, :perform_now)
         CurationConcerns.config.callback.run(:after_update_content, file_set, user)
         true
       end
